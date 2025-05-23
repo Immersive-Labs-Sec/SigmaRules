@@ -1,12 +1,11 @@
 title: ZEROLOT Wiper Malware Execution
 id: 4f9a3dca-1c4d-47c1-85d5-f6c1a5d0f98e
 status: experimental
-description: Detects execution of the ZEROLOT wiper malware which uses fsutil with specific parameters to corrupt files and IOCTL_DISK_DELETE_DRIVE_LAYOUT to destroy disk partitions
+description: Detects execution of the ZEROLOT wiper malware which uses fsutil with specific parameters to corrupt files
 author: Immersive Container 7
 tags:
   - attack.impact
   - attack.t1485  # Data Destruction
-  - attack.t1561.002  # Disk Wipe - Disk Structure Wipe
 logsource:
   category: process_creation
   product: windows
@@ -29,12 +28,8 @@ detection:
       - 'file'
       - 'setzerodataoffset'
 
-  # Detect suspicious process behavior
-  wiper_process_behavior:
-    CommandLine|contains: '\\.\\PhysicalDrive'
 
-
-  condition: fsutil_command_exact or fsutil_command_general or wiper_process_behavior
+  condition: fsutil_command_exact or fsutil_command_general
 level: critical
 falsepositives:
   - Legitimate disk management utilities that use similar API calls
